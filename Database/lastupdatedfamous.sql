@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2016 at 09:22 PM
+-- Generation Time: Jul 23, 2016 at 11:12 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.20
 
@@ -19,6 +19,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `famous`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `name`, `email`, `password`, `datetime`) VALUES
+(1, 'Admin', 'admin@admin.com', '123', '2016-07-24 11:29:35');
 
 -- --------------------------------------------------------
 
@@ -75,11 +96,27 @@ CREATE TABLE `mark` (
   `id` int(11) NOT NULL,
   `studentid` int(11) NOT NULL,
   `examid` int(11) NOT NULL,
-  `mark` varchar(100) NOT NULL,
+  `classid` int(11) NOT NULL,
   `subjectid` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `ct1` int(11) NOT NULL,
+  `ct2` int(11) NOT NULL,
+  `ct3` int(11) NOT NULL,
+  `ct4` int(11) NOT NULL,
+  `assignment1` int(11) NOT NULL,
+  `assignment2` int(11) NOT NULL,
+  `mid` int(11) NOT NULL,
+  `final` int(11) NOT NULL,
+  `examdate` date NOT NULL,
   `datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mark`
+--
+
+INSERT INTO `mark` (`id`, `studentid`, `examid`, `classid`, `subjectid`, `ct1`, `ct2`, `ct3`, `ct4`, `assignment1`, `assignment2`, `mid`, `final`, `examdate`, `datetime`) VALUES
+(0, 1, 6, 5, 4, 6, 7, 8, 9, 6, 9, 22, 25, '2016-07-04', '2016-07-23 10:25:20'),
+(0, 2, 5, 3, 7, 6, 7, 8, 9, 6, 9, 22, 25, '2016-07-04', '2016-07-23 10:25:20');
 
 -- --------------------------------------------------------
 
@@ -97,10 +134,10 @@ CREATE TABLE `student` (
   `gender` varchar(50) NOT NULL,
   `father` varchar(50) NOT NULL,
   `mother` varchar(50) NOT NULL,
+  `parentphone` varchar(50) NOT NULL,
   `address` text NOT NULL,
   `classid` int(11) NOT NULL,
-  `markid` int(11) NOT NULL,
-  `paymentid` int(11) NOT NULL,
+  `joindate` date NOT NULL,
   `datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -108,9 +145,10 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`id`, `studentid`, `fullname`, `email`, `password`, `phone`, `gender`, `father`, `mother`, `address`, `classid`, `markid`, `paymentid`, `datetime`) VALUES
-(1, 'fa0001', 'Abdullah Masud', 'masud@gmail.com', '123', '01564543532', 'Male', 'Abdullah samad', 'Shiurina', 'Jhenaidah', 8, 0, 0, '2016-07-21 00:00:00'),
-(2, 'fa0002', 'Abdullah Masud', 'masud@gmail.com', '345', '01564543532', 'Male', 'Abdullah samad', 'Shiurina', 'Jhenaidah', 9, 0, 0, '2016-07-21 00:00:00');
+INSERT INTO `student` (`id`, `studentid`, `fullname`, `email`, `password`, `phone`, `gender`, `father`, `mother`, `parentphone`, `address`, `classid`, `joindate`, `datetime`) VALUES
+(1, 'fa0001', 'Md Rasheduzzaman', 'jmrashed@gmail.com', 'GfBf.987', '1910077628', 'male', 'Abdullah samad', 'Shiurina', '1910077628', '1/2, Nurjahan Road, Mohammadpur, Dhaka', 10, '0000-00-00', '2016-07-21 00:00:00'),
+(2, 'fa0002', 'Md Rasheduzzaman', 'jmrashed@gmail.com', '345', '1910077628', 'male', 'Abdullah samad', 'Shiurina', '1910077628', '1/2, Nurjahan Road, Mohammadpur, Dhaka', 9, '0000-00-00', '2016-07-21 00:00:00'),
+(3, 'FACJ', 'Md Rasheduzzaman', 'jmrashed@gmail.com', 'GfBf.987', '1910077628', 'male', 'Jafor', 'Jamila', '1910077628', '1/2, Nurjahan Road, Mohammadpur, Dhaka', 10, '2016-07-31', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -180,6 +218,12 @@ INSERT INTO `teacher` (`id`, `fullname`, `degree`, `designation`, `email`, `pass
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `class`
 --
 ALTER TABLE `class`
@@ -214,20 +258,25 @@ ALTER TABLE `teacher`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `exam`
 --
 ALTER TABLE `exam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `subject`
 --
