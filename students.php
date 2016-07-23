@@ -3,16 +3,19 @@ include("connection.php");
 $Message = "";
 $id = "";
 $fullname = "";
-$degree = "";
 $designation = "";
 $subjectid = "";
-$email = "";
+$email = "student@demo.com";
 $phone = "";
 $joindate = "";
-$designation = "";
-$address = "";
+$address = "Jhenaidah.";
 $subjectid = "";
 $gender = "";
+$father = "Mr. ";
+$mother = "Mrs. ";
+$password = "123456";
+$parentphone = "";
+$actiontitle="Add student";
 
 
 if (isset($_GET['deletestudent'])) {
@@ -26,8 +29,8 @@ if (isset($_GET['deletestudent'])) {
     }
 }
 
-
-if (isset($_POST['submit'])) {
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
     $fullName = $_POST['fullName'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -35,17 +38,52 @@ if (isset($_POST['submit'])) {
     $joindate = $_POST['joindate'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $subjectid = $_POST['subjectid'];
-    $degree = $_POST['degree'];
-    $designation = $_POST['designation'];
+    $classid = $_POST['classid'];
+    $father = $_POST['father'];
+    $mother = $_POST['mother'];
+    $parentphone = $_POST['parentphone'];
 
-    $sql = "INSERT INTO  student  (fullname ,  degree ,  designation ,  email ,  password ,  gender , 
-          joindate ,  address ,  phone ,  subjectid ,  datetime )
-            VALUES ( '$fullName', '$degree', '$designation', '$email', '$password', '$gender', "
-            . "'$joindate', '$address', '$phone', '$subjectid', now())";
+    $sql = "UPDATE student SET fullname = '$fullName', email = '$email', password = '$password', phone = '$phone', 
+		gender = '$gender', father = '$father', mother = '$mother', parentphone = '$parentphone', address = '$address', classid='$classid' WHERE  id = $id";
+ //  echo $sql;
+   if ($conn->query($sql) === TRUE) {
+
+        header('Location:students.php?Message= A student has been Updated. ');
+	/*
+        echo '<pre>';	
+        print_r($_POST);
+        echo '</pre>';
+         
+         */
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+
+if (isset($_POST['submit'])) {
+
+    $studentid = $_POST['studentid'];
+    $fullName = $_POST['fullName'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $gender = $_POST['gender'];
+    $joindate = $_POST['joindate'];
+    $address = $_POST['address'];
+    $phone = $_POST['phone'];
+    $classid = $_POST['classid'];
+    $father = $_POST['father'];
+    $mother = $_POST['mother'];
+    $parentphone = $_POST['parentphone'];
+
+    $sql = "INSERT INTO student (studentid, fullname, email, password, phone, gender, father, 
+	mother, parentphone, address, classid, joindate, datetime) 
+            VALUES (  '$studentid', '$fullName', '$email', '$password', '$phone', '$gender', '$father', '$mother',"
+            . " '$parentphone', '$address', '$classid','$joindate', now())";
     if ($conn->query($sql) === TRUE) {
 
         header('Location:students.php?Message= A student has been Saved. ');
+	 
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -65,16 +103,17 @@ include("leftsidebar.php");
 
     <section class="content-header">
         <h1>
-            Teachers
+            Student
             <small>Control panel</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Teachers</li>
+            <li><a href="#"><i class="fa fa-dashboard" ></i> Home</a></li>
+            <li class="active">Students</li>
         </ol>
     </section>
     <?php
     if (isset($_GET['viewstudent'])) {
+        
         $id = $_GET['id'];
         $sql = "SELECT * FROM student where id=$id";
         $result = $conn->query($sql);
@@ -86,15 +125,15 @@ include("leftsidebar.php");
                 $fullname = $row["fullname"];
                 $studentid = $row["studentid"];
                 $classid = $row["classid"];
-                $class= get_className($classid);
-                $markid = $row["markid"]; 
+                $class = get_className($classid);
                 $email = $row["email"];
                 $gender = $row["gender"];
                 $phone = $row["phone"];
                 $father = $row["father"];
                 $mother = $row["mother"];
-                $address = $row["address"];  
+                $address = $row["address"];
                 $password = $row['password'];
+                $parentphone = $row['parentphone'];
                 $datetime = $row['datetime'];
             }
         }
@@ -102,22 +141,26 @@ include("leftsidebar.php");
         <section class="content">
             <div class="box col-xs-12">
                 <div class="box-header">
-                    <h3 class="box-title ng-binding"><i class="fa fa-info-circle" aria-hidden="true"></i> Student Information</h3>
+                    <h3 class="box-title "><i class="fa fa-info-circle" aria-hidden="true" style="color:#00acd6;" ></i> Student Information</h3>
 
                     <span class="pull-right"> 
-                        <a href="sendmessage.php?studentId=<?= $id; ?>" class="btn btn-primary" > 
-                            <i class="fa fa-envelope-o" aria-hidden="true"></i> Send Message</a> 
-                        <a class="btn-danger btn" href="students.php"><i class="fa fa-times" aria-hidden="true"></i> Close </a></span>
+                        <a href="students.php?id=<?= $id; ?>&editstudent=yes" class="btn btn-primary" > 
+                            <i class="fa fa-edit" aria-hidden="true"></i> Edit Info</a> 
+                            
+                              <a href="sendmessage.php?studentId=<?= $id; ?>" class="btn btn-primary" > 
+                            <i class="fa fa-envelope-o" aria-hidden="true"></i> Send Message</a>
+                            
+                            <a class="btn-danger btn" href="students.php"><i class="fa fa-times" aria-hidden="true"></i> Close </a></span>
                 </div>
                 <div class="col-md-4">
-                    <img src="images/1.jpg" class="img img-rounded img-responsive" ><br>
-                    <h3><?= $fullname; ?></h3>
-                    <i class="danger"> <b>Published: </b> <?= $datetime; ?></i>
+                    <img src="images/student_icon.jpg" class="img img-rounded img-responsive img-thumbnail" ><br>
+                    <h3><?= $fullname; ?></h3> 
+                    <span class="label label-success"><b>Published: </b> <?= $datetime; ?></i></span>
                 </div>
                 <div class="col-md-8">
                     <table class="table table-responsive table-striped table-bordered">
                         <tr> <th> Full Name</th><td><b> <?= $fullname; ?> </b> </td></tr>
-                        <tr> <th> Student ID</th><td> <?=$studentid; ?> </td></tr> 
+                        <tr> <th> Student ID</th><td> <?= $studentid; ?> </td></tr> 
                         <tr> <th> Email</th><td> <?= $email; ?> </td></tr>
                         <tr> <th> Phone Number</th><td> <?= $phone; ?> </td></tr>
                         <tr> <th> Address</th><td> <?= $address; ?> </td></tr>
@@ -139,7 +182,7 @@ include("leftsidebar.php");
         <?php
         //initial_variable();
         if (isset($_GET['editstudent'])) {
-
+            $actiontitle="Update student info";
             $id = $_GET['id'];
             $sql = "SELECT * FROM student where id=$id";
             $result = $conn->query($sql);
@@ -148,16 +191,18 @@ include("leftsidebar.php");
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
 
+                    $studentID = $row["studentid"];
                     $fullname = $row["fullname"];
-                    $degree = $row["degree"];
-                    $designation = $row["designation"];
-                    $subjectid = $row["subjectid"];
+                    $father = $row["father"];
+                    $mother = $row["mother"];
+                    $classid = $row["classid"];
                     $email = $row["email"];
                     $phone = $row["phone"];
                     $address = $row["address"];
                     $joindate = $row["joindate"];
-                    $designation = $row["designation"];
+                    $gender = $row["gender"];
                     $password = $row['password'];
+                    $parentphone = $row['parentphone'];
                 }
             }
         }
@@ -165,65 +210,68 @@ include("leftsidebar.php");
         <section class="content">
             <div class="box col-xs-12">
                 <div class="box-header">
-                    <h3 class="box-title ng-binding">Add student</h3>
+                    
+                    <h3 class="box-title "><?=$actiontitle;?></h3>
+                    
+                    <span class="pull-right"> <a class="btn-danger btn" href="students.php"><i class="fa fa-times" aria-hidden="true"></i> Close </a></span>
                 </div>
                 <div class="box-body ">
                     <form class="form-horizontal" method="post" action="students.php" >
+                        <?php
+                        $chars = "0123456789";
+                        $studentID = "FACJ-" . substr(str_shuffle($chars), 0, 4);
+                        ?>
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label ng-binding">Full name * </label>
+                            <label for="inputEmail3" class="col-sm-2 control-label ">Student ID * </label>
+                            <div class="col-sm-10">
+                                <input type="text"  value="<?= $studentID; ?>" name="studentid" class="form-control " required="" placeholder="Full name" readonly="true">
+                            </div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label ">Full name * </label>
                             <div class="col-sm-10">
                                 <input type="text" value="<?= $fullname; ?>" name="fullName" class="form-control" required="" placeholder="Full name">
                             </div>
                         </div> 
 
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label ng-binding">Designation </label>
+                            <label for="inputEmail3" class="col-sm-2 control-label ">Email </label>
                             <div class="col-sm-10">
-                                <input type="text" value="<?= $designation; ?>"  name="designation" class="form-control" required="" placeholder="Designation">
+                                <input type="email" value="<?= $email; ?>"  name="email" class="form-control" required="" placeholder="Email Address">
                             </div>
                         </div> 
 
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label ng-binding">Last Degree </label>
+                            <label for="inputEmail3" class="col-sm-2 control-label ">Password </label>
                             <div class="col-sm-10">
-                                <input type="text" name="degree" value="<?= $degree; ?>"  class="form-control" required="" placeholder="Last Degree">
+                                <input type="password" name="password" value="<?= $password; ?>"  class="form-control" required="" placeholder="Last Degree">
                             </div>
                         </div> 
 
 
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Email address *</label>
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Phone Number *</label>
                             <div class="col-sm-10">
-                                <input type="email"  value="<?= $email; ?>"  name="email" class="form-control" placeholder="Email address" required="">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Password *</label>
-                            <div class="col-sm-10">
-                                <input 
-                                <?php if (isset($_GET['editstudent'])) {
-                                    echo 'type="text"';
-                                } else {
-                                    echo 'type="password"';
-                                } ?>
-                                    value="<?= $password; ?>"  name="password" class="form-control" required="" placeholder="Password">
+                                <input type="number"  value="<?= $phone; ?>"  name="phone" class="form-control" placeholder="Phone Number" required="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Gender</label>
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Gender</label>
                             <div class="col-sm-10">
 
                                 <div class="radio">
-                                    <label class="ng-binding">
-                                        <input type="radio" name="gender" value="male" <?php if (($gender = "male") || ($gender = "")) {
-                                    echo 'Checked';
-                                } ?>>
+                                    <label class="">
+                                        <input type="radio" name="gender" value="male" <?php
+                    if (($gender = "male") || ($gender = "")) {
+                        echo 'Checked';
+                    }
+                        ?>>
                                         Male
                                     </label>
                                 </div>
                                 <div class="radio">
-                                    <label class="ng-binding">
+                                    <label class="">
                                         <input type="radio" name="gender" value="female"   >
                                         Female
                                     </label>
@@ -231,32 +279,42 @@ include("leftsidebar.php");
 
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Join Date</label>
-                            <div class="col-sm-10">
-                                <input type="date" id="datemask" value="<?= $joindate; ?>" name="joindate"  class="form-control datemask ng-pristine ng-valid">
-                            </div>
-                        </div>
-                        <div date-picker="" selector=".datemask"></div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Address</label>
-                            <div class="col-sm-10">
-                                <input type="text" name="address" value="<?= $address; ?>" class="form-control ng-pristine ng-valid" ng-model="form.address" placeholder="Address">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Phone No</label>
-                            <div class="col-sm-10">
-                                <input type="text" name="phone" value="<?= $phone; ?>" class="form-control ng-pristine ng-valid" ng-model="form.phoneNo" placeholder="Phone No">
-                            </div>
-                        </div> 
+
 
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Subject</label>
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Father Name *</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="subjectid" > 
+                                <input type="text"  value="<?= $father; ?>"  name="father" class="form-control" required="" placeholder="Father Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Mother Name *</label>
+                            <div class="col-sm-10">
+                                <input  type="text" value="<?= $mother; ?>"  name="mother" class="form-control" required="" placeholder="Mother Name">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Parent Phone *</label>
+                            <div class="col-sm-10">
+                                <input type="number"  value="<?= $parentphone; ?>"  name="parentphone" class="form-control" required="" placeholder="Parent Phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Address *</label>
+                            <div class="col-sm-10">
+                                <input type="text"  value="<?= $address; ?>"  name="address" class="form-control" required="" placeholder="Address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Select Class</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="classid" > 
                                     <?php
-                                    $sql = "SELECT * FROM subject ORDER BY subjectname";
+                                    $sql = "SELECT * FROM class ORDER BY classname";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
@@ -264,26 +322,33 @@ include("leftsidebar.php");
                                         while ($row = $result->fetch_assoc()) {
                                             ?>
 
-                                            <option value="<?= $row['id']; ?>" <?php if ($sujectid = $row['id']) echo 'selected'; ?> class="ng-binding ng-scope"><?= $row['subjectname']; ?></option>
-            <?php
-        }
-    }
-    ?> 
+                                            <option value="<?= $row['id']; ?>" <?php if ($classid = $row['id']) echo 'selected'; ?> class=" ng-scope"><?= $row['classname']; ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    ?> 
 
                                 </select>
+
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label ">Join Date</label>
+                            <div class="col-sm-10">
+                                <input type="date" id="datemask" value="<?= $joindate; ?>" name="joindate"  class="form-control datemask ng-pristine ng-valid">
+                            </div>
+                        </div> 
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
-                                       <?php if (isset($_GET['editstudent'])) { ?>
+                                <?php if (isset($_GET['editstudent'])) { ?>
 
-                                    <input type="submit" name="update"  class="btn btn-primary ng-binding" value=Update student">
-    <?php } else { ?>
-                                           <input type="submit" name="submit"  class="btn btn-primary ng-binding" value=Add student">
+                                    <input type="submit" name="update"  class="btn btn-primary " value="Update student">
+                                <?php } else { ?>
+                                    <input type="submit" name="submit"  class="btn btn-primary " value="Add student">
 
-    <?php } ?>
+                                <?php } ?>
 
                             </div>
                         </div>
@@ -293,55 +358,55 @@ include("leftsidebar.php");
             </div>
 
         </section>
-<?php } ?>
+    <?php } ?>
 
 
     <section class="content ng-scope">
-<?php if (isset($_GET['Message'])) {
-    ?>
+        <?php if (isset($_GET['Message'])) {
+            ?>
             <div class="col-md-12 pull-right"><div class="alert alert-success">
                     <strong>Success ! </strong><?php echo $_GET['Message']; ?> </div></div>
-<?php } ?> 
+        <?php } ?> 
 
-        <a href=" students.php?addstudent=yes"  class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print ng-binding">Add student</a>
+        <a href=" students.php?addstudent=yes"  class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print ">Add student</a>
         <div class="btn-group pull-right no-print">
-            <button type="button" class="btn btn-success btn-flat ng-binding">Export</button>
+            <button type="button" class="btn btn-success btn-flat ">Export</button>
             <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-                <span class="sr-only ng-binding">Toggle Dropdown</span>
+                <span class="sr-only ">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="students/export" class="ng-binding">Export to Excel</a></li>
-                <li><a href="students/exportpdf" target="_BLANK" class="ng-binding">Export to PDF</a></li>
+                <li><a href="students/export" class="">Export to Excel</a></li>
+                <li><a href="students/exportpdf" target="_BLANK" class="">Export to PDF</a></li>
             </ul>
         </div>
         <div class="btn-group pull-right no-print">
-            <button type="button" class="btn btn-success btn-flat ng-binding">Import</button>
+            <button type="button" class="btn btn-success btn-flat ">Import</button>
             <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-                <span class="sr-only ng-binding">Toggle Dropdown</span>
+                <span class="sr-only ">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a ng-click="import('excel')" class="ng-binding">Import from Excel</a></li>
+                <li><a ng-click="import('excel')" class="">Import from Excel</a></li>
             </ul>
         </div>
-        <a href="javascript:window.print()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print ng-binding">Print</a>
+        <a href="javascript:window.print()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print ">Print</a>
         <div class="box col-xs-12">
             <div class="box-header">
-                <h3 class="box-title ng-binding">List students</h3>
+                <h3 class="box-title ">List students</h3>
 
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-hover">
                     <tbody><tr> 
-                            <th class="ng-binding">ID</th>
-                            <th class="ng-binding">Student ID</th> 
-                            <th class="ng-binding">Full name</th> 
-                            <th class="ng-binding">Class</th>
-                            <th class="ng-binding">Email</th>
-                            <th class="ng-binding">Phone</th>
-                            <th class="ng-binding">Address</th> 
-                            <th class="no-print ng-binding">Operations</th>
+                            <th class="">ID</th>
+                            <th class="">Student ID</th> 
+                            <th class="">Full name</th> 
+                            <th class="">Class</th>
+                            <th class="">Email</th>
+                            <th class="">Phone</th>
+                            <th class="">Address</th> 
+                            <th class="no-print ">Operations</th>
                         </tr>
                         <?php
                         $sql = "SELECT * FROM student";
@@ -355,28 +420,28 @@ include("leftsidebar.php");
 
 
                                 <tr total-items="totalItems" ng-repeat="student in students| itemsPerPage:20" class="ng-scope">
-                                    <td class="ng-binding"><?= $row["id"]; ?></td>
-                                       <td class="ng-binding"><?= $row["studentid"]; ?></td>
+                                    <td class=""><?= $row["id"]; ?></td>
+                                    <td class=""><?= $row["studentid"]; ?></td>
                                     <td>
-                                        <a href="students.php?id=<?= $id; ?>&viewstudent=yes" class="ng-binding"><?= $row["fullname"]; ?></a>
+                                        <a href="students.php?id=<?= $id; ?>&viewstudent=yes" class=""><?= $row["fullname"]; ?></a>
 
                                     </td> 
-                                    <td class="ng-binding"><?php echo get_className($row["classid"]); ?></td>
-                                    <td class="ng-binding"><?= $row["email"]; ?></td>
-                                    <td class="ng-binding"><?= $row["phone"]; ?></td>
-                                    <td class="ng-binding"><?= $row["address"]; ?></td> 
+                                    <td class=""><?php echo get_className($row["classid"]); ?></td>
+                                    <td class=""><?= $row["email"]; ?></td>
+                                    <td class=""><?= $row["phone"]; ?></td>
+                                    <td class=""><?= $row["address"]; ?></td> 
                                     <td class="no-print">
                                         <a  href="students.php?id=<?= $id; ?>&editstudent=yes"  class="btn btn-info btn-flat" title="" tooltip="" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
                                         <a href="students.php?id=<?= $id; ?>&deletestudent=yes" type="button" class="btn btn-danger btn-flat" title="" tooltip="" data-original-title="Remove"><i class="fa fa-trash-o"></i></a>
                                     </td>
                                 </tr>
 
-        <?php
-    }
-} else {
-    echo ' <tr   class="ng-hide"><td class="noTableData ng-binding" colspan="5">No Teacher</td></tr>';
-}
-?>
+                                <?php
+                            }
+                        } else {
+                            echo ' <tr   class="ng-hide"><td class="noTableData " colspan="5">No Students</td></tr>';
+                        }
+                        ?>
 
                     </tbody></table>
                 <dir-pagination-controls class="pull-right ng-isolate-scope" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html"><!-- ngIf: 1 < pages.length --></dir-pagination-controls>

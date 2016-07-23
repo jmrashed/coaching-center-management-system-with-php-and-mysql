@@ -1,6 +1,6 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "famous");
-
+$loginID="Admin";
 function initial_variable() {
     $Message = "";
     $id = "";
