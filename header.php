@@ -1,6 +1,68 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "famous");
-$loginID="Admin";
+$loginID = "Admin";
+
+function get_gradePoint($mark) {
+    $g = $mark / 10;
+    $flag=5;
+    switch ($g) {
+        case 10:
+        case 9:
+        case 8: {
+                $flag = 5;
+                break;
+            }
+        case 7: {
+                $flag = 4;
+                break;
+            }
+
+        case 6: {
+                $flag = 3.50;
+                break;
+            }
+        case 5: {
+                $flag = 3;
+                break;
+            }
+
+        case 4: {
+                $flag = 2;
+                break;
+            }
+
+        case 3: {
+                if ($mark > 32) {
+                    $flag = 1;
+                    break;
+                } else {
+                    $flag = 0;
+
+                    break;
+                }
+            }
+        case 2:
+        case 1:
+        case 0: {
+                $flag = 0;
+            }
+        default : {
+                $flag = 0.0;
+            }
+    }
+    return $flag;
+}
+
+/*
+  80-100 A+ 5
+  70-79 A 4
+  60-69 A- 3.5
+  50-59 B 3
+  40-49 C 2
+  33-39 D 1
+  0-32 F 0
+ */
+
 function initial_variable() {
     $Message = "";
     $id = "";
@@ -46,7 +108,8 @@ function get_className($id) {
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">        
+        <link rel="stylesheet" href="bootstrap/css/mystyle.css">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
         <!-- Ionicons -->

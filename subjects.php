@@ -19,7 +19,8 @@ if (isset($_GET['deletesubject'])) {
 
 if (isset($_POST['submit'])) {
     $subjectName = $_POST['subjectName'];
-    $sql = "INSERT INTO subject (subjectname) VALUES ('$subjectName')";
+    $className = $_POST['className'];
+    $sql = "INSERT INTO subject (classname, subjectname) VALUES ('$className','$subjectName')";
     if ($conn->query($sql) === TRUE) {
 
         header('Location:subjects.php?Message= A new subject has been Saved. ');
@@ -31,8 +32,9 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['update'])) {
     $subjectName = $_POST['subjectName'];
+    $className = $_POST['className'];
     $id = $_POST['id'];
-    $sql ="UPDATE subject SET subjectname = '$subjectName' WHERE  id= $id";
+    $sql ="UPDATE subject SET classname='$className', subjectname = '$subjectName' WHERE  id= $id";
      if ($conn->query($sql) === TRUE) {
 
         header('Location:subjects.php?Message= A subject has been Updated. ');
@@ -90,6 +92,29 @@ include("leftsidebar.php");
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal " method="post" action="subjects.php" >
+                          <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Class</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="className" > 
+                                <?php
+                                $sql = "SELECT * FROM class ORDER BY classname";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    // output data of each row
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+
+                                        <option value="<?= $row['classname']; ?>"   class="ng-binding ng-scope"><?= $row['classname']; ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?> 
+
+                            </select>
+                        </div>
+                    </div>
+                        
                         <div class="form-group has-error" >
                             <label for="inputEmail3" class="col-sm-2 control-label ng-binding">Subject Name * </label>
                             <div class="col-sm-10">
@@ -160,22 +185,26 @@ include("leftsidebar.php");
                 <table class="table table-hover">
                     <tbody><tr> 
                             <th class="ng-binding">ID</th>
-                            <th class="ng-binding">Subject name</th>  
+                            <th class="ng-binding">Class</th> 
+                            <th class="ng-binding">Subject </th>  
                             <th class="no-print ng-binding">Operations</th>
                         </tr>
                         <?php
-                        $sql = "SELECT * FROM subject";
+                        $sql = "SELECT * FROM subject order by classname";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
                             // output data of each row
+                            $count=0;
                             while ($row = $result->fetch_assoc()) {
+                                $count=$count+1;
                                 ?>
 
 
                                 <tr  >
-                                    <td class="ng-binding"><?= $row["id"]; ?></td>
+                                    <td class="ng-binding"><?=$count; ?></td>
 
+                                    <td class="ng-binding"><?= $row["classname"]; ?></td> 
                                     <td class="ng-binding"><?= $row["subjectname"]; ?></td> 
                                     <td class="no-print">
                                         <a  href="subjects.php?id=<?= $row["id"]; ?>&editsubject=yes" class="btn btn-info btn-flat" title="" tooltip="" data-original-title="Edit"><i class="fa fa-pencil"></i></a>

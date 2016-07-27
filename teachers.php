@@ -231,12 +231,16 @@ include("leftsidebar.php");
 
                             </div>
                         </div>
+                        
+                     
+                        
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Join Date</label>
                             <div class="col-sm-10">
                                 <input type="date" id="datemask" value="<?= $joindate; ?>" name="joindate"  class="form-control datemask ng-pristine ng-valid">
                             </div>
                         </div>
+                        
                         <div date-picker="" selector=".datemask"></div>
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label ng-binding">Address</label>

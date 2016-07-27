@@ -1,0 +1,20 @@
+.coachinname{
+    font-family: Hobo Std;
+    color: #0089db;
+}
+.coachinaddress{
+    font-family: Lucida Calligraphy;
+    font-weight: bold;
+}
+.coachinmark{
+    font-family: Arial Black;
+    color: red;
+}
+.coachinclass{
+    font-family: Adobe Gothic Std B;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.border{
+   
+}

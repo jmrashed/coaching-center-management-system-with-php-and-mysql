@@ -42,13 +42,13 @@
                     <i class="fa fa-file-word-o"></i> <span>Exams </span> 
                 </a>
             </li>
-            
+
             <li>
                 <a href="results.php">
                     <i class="fa fa-file-word-o"></i> <span>Results </span> 
                 </a>
             </li>
-            
+
             <li>
                 <a href="calendar.php">
                     <i class="fa fa-calendar-check-o"></i> <span>Calendar </span> 
@@ -69,9 +69,23 @@
                 <ul class="treeview-menu">
                     <li><a href="changePassword.php"><i class="fa fa-circle-o"></i> Change Password</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Edit Profile</a></li>
+                    <li><a href="message.php"><i class="fa fa-circle-o"></i> Message</a></li>
+                    <li><a href="compose.php"><i class="fa fa-circle-o"></i> Compose Message</a></li>
                     <li><a href="logOut.php"><i class="fa fa-circle-o"></i> Logout</a></li> 
                 </ul>
             </li> 
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-envelope"></i> <span>Mailbox</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class=""><a href="message.php">Inbox <span class="label label-primary pull-right">13</span></a>
+                    </li>
+                    <li><a href="compose.php">Compose</a></li>
+                    <li><a href="readMessage.php">Read</a></li>
+                </ul>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->

@@ -38,13 +38,13 @@ if (isset($_POST['update'])) {
     $joindate = $_POST['joindate'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $classid = $_POST['classid'];
+    $class = $_POST['class'];
     $father = $_POST['father'];
     $mother = $_POST['mother'];
     $parentphone = $_POST['parentphone'];
 
     $sql = "UPDATE student SET fullname = '$fullName', email = '$email', password = '$password', phone = '$phone', 
-		gender = '$gender', father = '$father', mother = '$mother', parentphone = '$parentphone', address = '$address', classid='$classid' WHERE  id = $id";
+		gender = '$gender', father = '$father', mother = '$mother', parentphone = '$parentphone', address = '$address', class='$class' WHERE  id = $id";
  //  echo $sql;
    if ($conn->query($sql) === TRUE) {
 
@@ -71,15 +71,15 @@ if (isset($_POST['submit'])) {
     $joindate = $_POST['joindate'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $classid = $_POST['classid'];
+    $class = $_POST['class'];
     $father = $_POST['father'];
     $mother = $_POST['mother'];
     $parentphone = $_POST['parentphone'];
 
     $sql = "INSERT INTO student (studentid, fullname, email, password, phone, gender, father, 
-	mother, parentphone, address, classid, joindate, datetime) 
+	mother, parentphone, address, class, joindate, datetime) 
             VALUES (  '$studentid', '$fullName', '$email', '$password', '$phone', '$gender', '$father', '$mother',"
-            . " '$parentphone', '$address', '$classid','$joindate', now())";
+            . " '$parentphone', '$address', '$class','$joindate', now())";
     if ($conn->query($sql) === TRUE) {
 
         header('Location:students.php?Message= A student has been Saved. ');
@@ -124,8 +124,8 @@ include("leftsidebar.php");
 
                 $fullname = $row["fullname"];
                 $studentid = $row["studentid"];
-                $classid = $row["classid"];
-                $class = get_className($classid);
+                $class = $row["class"];
+                $class = get_className($class);
                 $email = $row["email"];
                 $gender = $row["gender"];
                 $phone = $row["phone"];
@@ -195,7 +195,7 @@ include("leftsidebar.php");
                     $fullname = $row["fullname"];
                     $father = $row["father"];
                     $mother = $row["mother"];
-                    $classid = $row["classid"];
+                    $class = $row["class"];
                     $email = $row["email"];
                     $phone = $row["phone"];
                     $address = $row["address"];
@@ -312,7 +312,7 @@ include("leftsidebar.php");
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label ">Select Class</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="classid" > 
+                                <select class="form-control" name="class" > 
                                     <?php
                                     $sql = "SELECT * FROM class ORDER BY classname";
                                     $result = $conn->query($sql);
@@ -322,7 +322,7 @@ include("leftsidebar.php");
                                         while ($row = $result->fetch_assoc()) {
                                             ?>
 
-                                            <option value="<?= $row['id']; ?>" <?php if ($classid = $row['id']) echo 'selected'; ?> class=" ng-scope"><?= $row['classname']; ?></option>
+                                            <option value="<?= $row['classname']; ?>" <?php if ($class = $row['id']) echo 'selected'; ?> class=" ng-scope"><?= $row['classname']; ?></option>
                                             <?php
                                         }
                                     }
@@ -426,7 +426,7 @@ include("leftsidebar.php");
                                         <a href="students.php?id=<?= $id; ?>&viewstudent=yes" class=""><?= $row["fullname"]; ?></a>
 
                                     </td> 
-                                    <td class=""><?php echo get_className($row["classid"]); ?></td>
+                                    <td class=""><?=$row["class"]; ?></td>
                                     <td class=""><?= $row["email"]; ?></td>
                                     <td class=""><?= $row["phone"]; ?></td>
                                     <td class=""><?= $row["address"]; ?></td> 
